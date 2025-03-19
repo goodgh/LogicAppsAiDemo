@@ -1,0 +1,21 @@
+
+1.2. ReceiveEbayOrder
+Workflow should be triggered by an HTTP POST request with a body containing eBay Purchase Order XML.
+The payload should be validated against the EbayPurchaseOrder.xsd schema.
+
+Once validated, the eBay order should be sent to a Service Bus queue to trigger sending a notification process.
+The following user properties should be provided: 
+- eBayOrderId: eBay's specific Order ID from the incoming XML.
+- CustomerEmail: Contact email of the buyer from the eBay Purchase Order XML.
+
+Then, the incoming eBay order needs to be transformed into the canonical PurchaseOrder schema using XSLT (EbayPO_to_PurchaseOrder.xslt).
+The transformation should also generate a unique (GUID-based) Canonical Order ID.
+
+The transformed Canonical PurchaseOrder XML must be sent to the Service Bus topic for received orders.
+The Service Bus message should have a user property OrderSource that specifies eBay as the origin of the order.
+
+The workflow should return an HTTP 200 response containing the assigned Canonical Order ID.
+
+In case of an error:
+- If XML validation fails, return HTTP 400 (Bad Request).
+- If a server or workflow error occurs, return HTTP 500 (Internal Server Error) with a short error description, if possible.

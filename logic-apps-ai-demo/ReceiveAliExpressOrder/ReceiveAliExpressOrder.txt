@@ -1,0 +1,16 @@
+1.3. ReceiveAliExpressOrder
+Receive AliExpress Purchase Order XML as a payload of HTTP POST request.
+Validate it against the AliPurchaseOrder.xsd schema.
+
+The order needs to be transformed into the canonical PurchaseOrder schema using XSLT (AliPO_to_PurchaseOrder.xslt).
+The transformation should also assign a unique (GUID-based) Canonical Order ID to the order.
+
+The workflow should also count the number of products positions in the order (based on <Items><Item> elements in the transformed order)
+and expose it as user property "ProductsNumber" when sending purchase order to service bus topic for received orders.
+Also "OrderSource" property should be exposed.
+
+The workflow should return an HTTP 200 response containing the assigned Canonical Order ID.
+
+In case of an error:
+- If XML validation fails, return HTTP 400 (Bad Request).
+- If a server or workflow error occurs, return HTTP 500 (Internal Server Error) with a short error description if possible."

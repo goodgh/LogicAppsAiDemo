@@ -1,0 +1,57 @@
+
+0. Infrastrucure details.
+Order processing is implemented by moving an order between topics in service bus and performing required actions on each stage.
+Topics involved into order processing are (to be appended):
+ReceivedOrders
+	subscriptions: all-orders;
+PreprocessedOrders 
+	subscriptions: all-orders;
+FailedOrders 
+	subscriptions: received-invalid, received-no-stock.
+
+Ebay specific service bus queue for notification purposes: ebayOrderReceiveNotification.
+
+For configuring service bus related workflow actions, the following connection should be used:
+"serviceProviderConfiguration": {
+                        "connectionName": "serviceBus-1",
+                        "operationId": <as needed>,
+                        "serviceProviderId": "/serviceProviders/serviceBus"
+                    }
+
+Storage account used by order processing: storacclogicappsaidemo.
+
+Amazon-specific archive blob container: amazon-received-orders-archive.
+For configuring blob storage related workflow actions, the following connection should be used:
+"serviceProviderConfiguration": {
+                        "connectionName": "AzureBlob-1",
+                        "operationId": <as needed>,
+                        "serviceProviderId": "/serviceProviders/AzureBlob"
+                    }					
+
+Workflows shouldn't hardcode such values as service bus topic/queue/subscription names, blob container name etc.
+Instead, they should be provided as workflow parameters.
+
+Workflow action name should reflect it's type and purpose but still remain compact.
+
+Promoted properties used for filtering/routing:
+schema-based:
+- orderSource (Amazon, eBay, AliExpress)
+- eBayOrderId (for eBay only)
+- CustomerEmail (for eBay only)
+
+not schema-based:
+- orderStatus (Received, Preprocessed, to be appended)
+- ProductsNumber (for Ali only)
+- failReason (Invalid, NoStock, to be appended)
+
+Known xml schemas:
+PurchaseOrder.xsd
+EbayPurchaseOrder.xsd
+AmazonPurchaseOrder.xsd
+AliPurchaseOrder.xsd
+
+Known xsl transformations:
+AliPO_to_PurchaseOrder.xslt
+AmazonPO_to_PurchaseOrder.xslt
+EbayPO_to_PurchaseOrder.xslt
+Map names usually follow the convention <SourceSchema>_to_<TargetSchema>. However, commonly used shortenings are possible like PO = PurchaseOrder.

@@ -1,0 +1,21 @@
+2. PreprocessPurchaseOrder
+
+Should read canonical purchase orders from the Service Bus topic subscription configured for received orders.
+The workflow must perform preprocessing tasks, including XML validation and a check for stock availability for each item in the order.
+
+Validate the canonical PurchaseOrder XML against the schema PurchaseOrder.xsd.
+If validation fails, mark the order as invalid and move it to the failed orders topic keeping "orderSource" user property and adding 
+"orderStatus" ("Received") and "failReason" ("Invalid").
+
+Stock Check: for each item in the order, check if the required quantity of the item is available. 
+Currently the interaction with the stock service can be simulated/emulated by comparing required amount with random numbers.
+
+If stock for all items is available, send the original canonical order to the preprocessed orders topic (preprocessedorders).
+Add user properties to the Service Bus message, preserving properties from the original message.
+
+If any item has insufficient stock, mark the order as failed and move it to the failed orders topic 
+with the "failReason" set to "NoStock".
+
+Regardless of whether the order was successfully preprocessed or marked as failed, delete the original received order message from the Service Bus subscription.
+
+If a server or workflow error occurs, notify the team and return appropriate error information (if applicable).

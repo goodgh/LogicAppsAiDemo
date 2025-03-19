@@ -1,0 +1,17 @@
+
+1.1. ReceiveAmazonOrder
+Workflow should be triggered by HTTP POST request with body containing Amazon Purchase Order xml.
+Need to validate the payload against the AmazonPurchaseOrder.xsd schema. 
+
+Orders from Amazon should be uploaded to blob storage for archiving, grouped by current date.
+Blob name should be equal to Amazon's Order ID. If exists, the blob should be overwritten.
+
+Then order need to be transformed into canonical schema using xslt which also should assign a new unique (Guid) 
+order id.
+
+The canonical order need to be sent to service bus topic for received orders.
+Service bus message should have user property "OrderSource" indicating from which online store the order came.
+
+Should return HTTP 200 response containg the assigned Canonical OrderID.
+
+In case of an error, should return appropriate Http status and short error description if possible.
