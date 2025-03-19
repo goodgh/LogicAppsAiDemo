@@ -1,0 +1,22 @@
+{
+  "received-orders-container-name": {
+    "type": "String",
+    "value": "received-orders"
+  },
+  "received-orders-topic-name": {
+    "type": "String",
+    "value": "ReceivedOrders"
+  },
+  "amazon-archive-blob-container": {
+    "type": "String",
+    "value": "amazon-received-orders-archive"
+  },
+  "preprocess-po-batch-size": {
+    "type": "Int",
+    "value": 8
+  },
+  "failed-orders-topic-name": {
+    "type": "String",
+    "value": "FailedOrders"
+  }
+}

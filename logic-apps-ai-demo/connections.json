@@ -1,0 +1,51 @@
+{
+  "serviceProviderConnections": {
+    "serviceBus": {
+      "parameterValues": {
+        "fullyQualifiedNamespace": "@appsetting('serviceBus_fullyQualifiedNamespace')",
+        "authProvider": {
+          "Type": "ManagedServiceIdentity"
+        }
+      },
+      "parameterSetName": "ManagedServiceIdentity",
+      "serviceProvider": {
+        "id": "/serviceProviders/serviceBus"
+      },
+      "displayName": "sb-logic-apps-ai-demo"
+    },
+    "AzureBlob": {
+      "parameterValues": {
+        "blobStorageEndpoint": "@appsetting('AzureBlob_blobStorageEndpoint')",
+        "authProvider": {
+          "Type": "ManagedServiceIdentity"
+        }
+      },
+      "parameterSetName": "ManagedServiceIdentity",
+      "serviceProvider": {
+        "id": "/serviceProviders/AzureBlob"
+      },
+      "displayName": "storacclogicappsaidemo_blob"
+    },
+    "serviceBus-1": {
+      "parameterValues": {
+        "connectionString": "@appsetting('serviceBus_11_connectionString')"
+      },
+      "parameterSetName": "connectionString",
+      "serviceProvider": {
+        "id": "/serviceProviders/serviceBus"
+      },
+      "displayName": "sb-logic-apps-ai-demo_conn_str"
+    },
+    "AzureBlob-1": {
+      "parameterValues": {
+        "connectionString": "@appsetting('AzureBlob_11_connectionString')"
+      },
+      "parameterSetName": "connectionString",
+      "serviceProvider": {
+        "id": "/serviceProviders/AzureBlob"
+      },
+      "displayName": "storacclogicappsaidemo_conn_str"
+    }
+  },
+  "managedApiConnections": {}
+}
